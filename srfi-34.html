@@ -56,13 +56,13 @@ by William Clinger, R. Kent Dybvig, Matthew Flatt, and Marc Feeley.</p>
  and <code>with-dynamic-environment</code>.</p>
 <p>The initial current exception handler of the program is implementation-dependent. However, it should interrupt the program in some way visible to the user, either by aborting it, invoking a debugger, or some similar action.</p>
 <h2>Establishing Exception Handlers</h2>
-<dl><dt><code>(with-exception-handler </code><var>handler</var>
+<dl><dt id="with-exception-handler"><code>(with-exception-handler </code><var>handler</var>
  <var>thunk</var><code>)</code></dt>
 <dd><p>Returns the result(s) of invoking <var>thunk</var>. <var>Handler</var>
  must be a procedure that accepts one argument. It is installed as the current exception handler for the dynamic extent (as determined by <code>dynamic-wind</code>) of the invocation of <var>thunk</var>.</p>
 </dd>
 </dl>
-<dl><dt><code>(guard </code><code>(</code>
+<dl><dt id="guard"><code>(guard </code><code>(</code>
 &lt;var&gt; &lt;clause<sub>1</sub>
 &gt; &lt;clause<sub>2</sub>
 &gt; ...<code>)</code>
@@ -83,7 +83,7 @@ by William Clinger, R. Kent Dybvig, Matthew Flatt, and Marc Feeley.</p>
 </dd>
 </dl>
 <h2>Raising Exceptions</h2>
-<dl><dt><code>(raise </code><var>obj</var><code>)</code></dt>
+<dl><dt id="raise"><code>(raise </code><var>obj</var><code>)</code></dt>
 <dd><p>Invokes the current exception handler on <var>obj</var>. The handler is called in the dynamic environment of the call to <code>raise</code>, except that the current exception handler is that in place for the call to <code>with-exception-handler</code>
  that installed the handler being called.  The handler's continuation is otherwise unspecified.</p>
 </dd>
