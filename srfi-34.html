@@ -1,22 +1,19 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN""http://www.w3.org/TR/REC-html40/loose.dtd">
-<html>
+<html lang="en">
 <head>
   <title>SRFI 34: Exception Handling for Programs</title>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="stylesheet" href="/srfi.css" type="text/css" />
+  <link rel="stylesheet" href="https://srfi.schemers.org/srfi.css" type="text/css" />
+  <link href="/favicon.png" rel="icon" sizes="192x192" type="image/png">
 </head>
 
 <body>
-<H1>Title</H1>
+<h1><a href="https://srfi.schemers.org/"><img class="srfi-logo" src="https://srfi.schemers.org/srfi-logo.svg" alt="SRFI surfboard logo" /></a>34: Exception Handling for Programs</h1>
 
-Exception Handling for Programs
+<p>by Richard Kelsey and Michael Sperber</p>
 
-<H1>Authors</H1>
-
-Richard Kelsey and Michael Sperber
-
-<H1>Status</H1>
+<h2>Status</h2>
 
 <p>This SRFI is currently in <em>final</em> status.  Here is <a href="https://srfi.schemers.org/srfi-process.html">an explanation</a> of each status that a SRFI can hold.  To provide input on this SRFI, please send email to <code><a href="mailto:srfi+minus+34+at+srfi+dotschemers+dot+org">srfi-34@<span class="antispam">nospam</span>srfi.schemers.org</a></code>.  To subscribe to the list, follow <a href="https://srfi.schemers.org/srfi-list-subscribe.html">these instructions</a>.  You can access previous messages via the mailing list <a href="https://srfi-email.schemers.org/srfi-34">archive</a>.</p>
 
@@ -30,7 +27,7 @@ Richard Kelsey and Michael Sperber
 	  <LI>2018-01-13 (missing test in <code>guard-aux</code> implementation)</LI></UL></LI>
 </UL>
 
-<h1>Abstract</h1>
+<h2>Abstract</h2>
 This SRFI defines exception-handling and exception-raising constructs for Scheme, including<ul><li>a <code>with-exception-handler</code>
  procedure and a <code>guard</code>
  form for installing exception-handling procedures,</li>
@@ -39,7 +36,7 @@ This SRFI defines exception-handling and exception-raising constructs for Scheme
 </ul>
 <p>This SRFI is based on (withdrawn) <a href="https://srfi.schemers.org/srfi-12/">SRFI 12: Exception Handling</a>
 by William Clinger, R. Kent Dybvig, Matthew Flatt, and Marc Feeley.</p>
-<h1>Rationale</h1>
+<h2>Rationale</h2>
 <p>The goals of the exception mechanism specified in this SRFI are to help programmers share code which relies on exception handling, and to be easily added to existing Scheme systems.</p>
 <p>This SRFI is primarily useful in conjunction with one or more companion SRFIs:</p>
 <ul><li>a SRFI specifying exception-describing objects (conditions). An example is <a href="https://srfi.schemers.org/srfi-35">SRFI 35</a>
@@ -48,14 +45,14 @@ by William Clinger, R. Kent Dybvig, Matthew Flatt, and Marc Feeley.</p>
  (I/O Conditions).</li>
 <li>a SRFI specifying how computations may be resumed after an exception is raised.</li>
 </ul>
-<h1>Specification</h1>
+<h2>Specification</h2>
 <p>Exception handlers are one-argument procedures that determine the action the program takes when an exceptional situation is signalled. The system implicitly maintains a <i>current exception handler</i>.</p>
 <p>The program raises an exception by invoking the current exception handler, passing to it an object encapsulating information about the exception. Any procedure accepting one argument may serve as an exception handler and any object may be used to represent an exception.</p>
 <p>The system maintains the current exception handler as part of  the <i>dynamic environment</i> of the program, akin to the current input or output port, or the context for <code>dynamic-wind</code>. The dynamic environment can be thought of as that part of a continuation that does not specify the destination of any returned values.  It includes the current input and output ports, the <code>dynamic-wind</code>
  context, and this SRFI's current exception handler.  See the reference implementation for portable definitions of <code>current-dynamic-environment</code>
  and <code>with-dynamic-environment</code>.</p>
 <p>The initial current exception handler of the program is implementation-dependent. However, it should interrupt the program in some way visible to the user, either by aborting it, invoking a debugger, or some similar action.</p>
-<h2>Establishing Exception Handlers</h2>
+<h3>Establishing Exception Handlers</h3>
 <dl><dt id="with-exception-handler"><code>(with-exception-handler </code><var>handler</var>
  <var>thunk</var><code>)</code></dt>
 <dd><p>Returns the result(s) of invoking <var>thunk</var>. <var>Handler</var>
@@ -82,13 +79,13 @@ by William Clinger, R. Kent Dybvig, Matthew Flatt, and Marc Feeley.</p>
  expression.</p>
 </dd>
 </dl>
-<h2>Raising Exceptions</h2>
+<h3>Raising Exceptions</h3>
 <dl><dt id="raise"><code>(raise </code><var>obj</var><code>)</code></dt>
 <dd><p>Invokes the current exception handler on <var>obj</var>. The handler is called in the dynamic environment of the call to <code>raise</code>, except that the current exception handler is that in place for the call to <code>with-exception-handler</code>
  that installed the handler being called.  The handler's continuation is otherwise unspecified.</p>
 </dd>
 </dl>
-<h1>Examples</h1>
+<h2>Examples</h2>
 <pre>(call-with-current-continuation
  (lambda (k)
    (with-exception-handler (lambda (x)
@@ -179,7 +176,7 @@ PRINTS: reraised 0
          ((assq 'b condition)))
   (raise (list (cons 'b 23))))
 =&gt; (b . 23)
-</pre><h1>Reference Implementation</h1>
+</pre><h2>Reference Implementation</h2>
 <p>The reference implementation makes use of <a href="https://srfi.schemers.org/srfi-9/">SRFI 9</a>
  (&quot;Defining Record Types&quot;), and <a href="https://srfi.schemers.org/srfi-23/">SRFI 23</a>
  (&quot;Error reporting mechanism&quot;).</p>
@@ -260,7 +257,7 @@ PRINTS: reraised 0
      (if test
          (begin result1 result2 ...)
          (guard-aux reraise clause1 clause2 ...)))))
-</pre><h1>References</h1>
+</pre><h2>References</h2>
 <ul><li><a href="https://srfi.schemers.org/srfi-12/">SRFI 12: Exception Handling</a>
 by William Clinger, R. Kent Dybvig, Matthew Flatt, and Marc Feeley</li>
 <li><a href="https://srfi.schemers.org/srfi-18/">SRFI 18: Multithreading support</a>
@@ -284,7 +281,7 @@ by Marc Feeley</li>
  by Robert Harper</li>
 </ul>
 
-<H1>Copyright</H1>
+<h2>Copyright</h2>
 
 <p>Copyright (C) Richard Kelsey, Michael Sperber (2002). All Rights
 Reserved.</p>
